@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>diffuse.vert</file>
+        <file>diffuse.frag</file>
+    </qresource>
+</RCC>
