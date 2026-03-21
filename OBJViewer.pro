@@ -12,12 +12,16 @@ SOURCES += \
     glwidget.cpp \
     main.cpp \
     mainwindow.cpp \
+    material.cpp \
+    materiallibrary.cpp \
     mesh.cpp \
     orbitcamera.cpp
 
 HEADERS += \
     glwidget.h \
     mainwindow.h \
+    material.h \
+    materiallibrary.h \
     mesh.h \
     orbitcamera.h
 
