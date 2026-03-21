@@ -32,8 +32,7 @@ void GLWidget::initializeGL()
 
     m_camera = std::make_unique<OrbitCamera>();
 
-    mesh = new Mesh;
-    mesh->load("cube.obj");
+    model.loadObjFromFile("cube.obj");
 
     connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &GLWidget::cleanup);
 }
@@ -64,7 +63,7 @@ void GLWidget::paintGL()
     m_program->setUniformValue("modelMatrix", modelMatrix);
     m_program->setUniformValue("viewMatrix", m_camera->getViewMatrix());
 
-    mesh->draw();
+    model.draw();
 }
 
 void GLWidget::timerEvent(QTimerEvent *event)

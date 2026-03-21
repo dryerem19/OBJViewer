@@ -15,6 +15,7 @@ SOURCES += \
     material.cpp \
     materiallibrary.cpp \
     mesh.cpp \
+    model.cpp \
     orbitcamera.cpp
 
 HEADERS += \
@@ -23,7 +24,9 @@ HEADERS += \
     material.h \
     materiallibrary.h \
     mesh.h \
-    orbitcamera.h
+    model.h \
+    orbitcamera.h \
+    vertex.h
 
 FORMS += \
     mainwindow.ui

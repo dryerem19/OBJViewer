@@ -9,7 +9,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-#include "mesh.h"
+#include "model.h"
 #include "orbitcamera.h"
 
 class GLWidget final : public QOpenGLWidget, protected QOpenGLFunctions
@@ -46,7 +46,7 @@ private:
 
     QOpenGLShaderProgram* m_program = nullptr;
     QOpenGLDebugLogger m_logger;
-    Mesh* mesh;
+    Model model;
 
     std::unique_ptr<OrbitCamera> m_camera;
 };

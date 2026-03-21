@@ -134,8 +134,8 @@ bool MaterialLibrary::loadMaterialFromFile(const QString &filename)
             QString mapName;
             ts >> mapName;
 
-            QFileInfo matFileInfo(filename);
-            QString fullMapPath = QString("%1/%2").arg(matFileInfo.absolutePath()).arg(mapName);
+            QFileInfo   matFileInfo(filename);
+            QString     fullMapPath = QString("%1/%2").arg(matFileInfo.absolutePath()).arg(mapName);
             material->setDiffuseMap(fullMapPath);
         }
     }

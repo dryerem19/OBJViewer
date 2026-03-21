@@ -1,101 +1,28 @@
 #include "mesh.h"
 
-#include <QFile>
-#include <QTextStream>
-
-Mesh::Mesh()
-    : m_vbo(QOpenGLBuffer::VertexBuffer)
+Mesh::Mesh(QObject *parent)
+    : QObject(parent)
+    , m_vbo(QOpenGLBuffer::VertexBuffer)
     , m_ebo(QOpenGLBuffer::IndexBuffer)
 {
-    auto ctx = QOpenGLContext::currentContext();
-    m_func = ctx->functions();;
+    auto ctx    = QOpenGLContext::currentContext();
+    m_func      = ctx->functions();;
 }
 
 void Mesh::draw()
 {
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
-    // glDrawArrays(GL_TRIANGLES, 0, 24);
     m_func->glDrawElements(GL_TRIANGLES, m_ebo.size(), GL_UNSIGNED_INT, 0);
 }
 
-bool Mesh::load(const QString &filename)
+void Mesh::create(const QVector<Vertex> &vertices, const QVector<quint32> &indices)
 {
-    QFile file(filename);
-    if (!file.open(QFile::ReadOnly)) {
-        return false;
-    }
-
-
-    QVector<QVector3D> vCoords;
-    QVector<QVector3D> nCoords;
-    QVector<QVector2D> tCoords;
-
-    QVector<Vertex>         m_vertices;
-    QVector<quint32>   m_indices;
-
-    QTextStream in(&file);
-    while (!in.atEnd())
-    {
-        QString input = in.readLine();
-        if (input.isEmpty() || input[0] == '#') {
-            continue;
-        }
-
-        QStringList tokens = input.split(" ");
-        if (tokens.empty()) {
-            continue;
-        }
-
-        std::string key = tokens[0].toStdString();
-        switch (key[0])
-        {
-            case 'v':
-            {
-                switch (key[1])
-                {
-                    case 't':
-                        tCoords.append(QVector2D(tokens[1].toFloat(), tokens[2].toFloat()));
-                        break;
-                    case 'n':
-                        nCoords.append(QVector3D(tokens[1].toFloat(), tokens[2].toFloat(), tokens[3].toFloat()));
-                        break;
-                    default:
-                        vCoords.append(QVector3D(tokens[1].toFloat(), tokens[2].toFloat(), tokens[3].toFloat()));
-                        break;
-                }
-                break;
-            }
-            case 'f':
-                for (int i = 1; i <= 3; i++)
-                {
-                    QStringList f = tokens[i].split("/");
-
-                    int vindex = f[0].toLong();
-                    int tindex = f[1].toLong();
-                    int nindex = f[2].toLong();
-
-                    vindex = vindex < 0 ? vCoords.size() + vindex : vindex - 1;
-                    tindex = tindex < 0 ? tCoords.size() + tindex : tindex - 1;
-                    nindex = nindex < 0 ? nCoords.size() + nindex : nindex - 1;
-
-                    m_vertices.append(Vertex(vCoords[vindex], tCoords[tindex], nCoords[nindex]));
-                    m_indices.append(m_indices.size());
-                }
-            default:
-                break;
-        }
-    }
-
-    if (m_vertices.empty()) {
-        return false;
-    }
-
     // Заполняем буфер
     if (m_vbo.isCreated()) m_vbo.destroy();
     Q_ASSERT(m_vbo.create());
     m_vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
     m_vbo.bind();
-    m_vbo.allocate(m_vertices.constData(), m_vertices.size() * sizeof(Vertex));
+    m_vbo.allocate(vertices.constData(), vertices.size() * sizeof(Vertex));
 
     // Создаём объект массива вершин
     if (m_vao.isCreated()) m_vao.destroy();
@@ -124,11 +51,15 @@ bool Mesh::load(const QString &filename)
     m_ebo.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
     m_ebo.bind();
-    m_ebo.allocate(m_indices.constData(), m_indices.size() * sizeof(quint32));
+    m_ebo.allocate(indices.constData(), indices.size() * sizeof(quint32));
 
+    // Освобождаем ресурсы
     m_vao.release();
     m_ebo.release();
     m_vbo.release();
+}
 
-    return true;
+void Mesh::setMaterial(Material *material)
+{
+    m_material = material;
 }
