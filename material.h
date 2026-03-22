@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QString>
 #include <QVector3D>
+#include <QOpenGLTexture>
 
 class Material : public QObject
 {
@@ -22,17 +23,19 @@ public slots:
 
     const QString&      getName         () const;
     const float&        getShiness      () const;
-    const QImage&       getDiffuseMap   () const;
+    QOpenGLTexture*     getDiffuseMap   () const;
     const QVector3D&    getDiffuseColor () const;
     const QVector3D&    getAmbienceColor() const;
     const QVector3D&    getSpecularColor() const;
+    const bool          isHasDiffuseMap () const;
+
 private:
     QString             m_name;
     float               m_shinnes;
-    QImage              m_diffuseMap;
     QVector3D           m_diffuseColor;
     QVector3D           m_ambienceColor;
     QVector3D           m_specularColor;
+    QOpenGLTexture*     m_diffuseMap{nullptr};
 };
 
 #endif // MATERIAL_H

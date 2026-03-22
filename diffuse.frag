@@ -1,8 +1,19 @@
 #version 330 core
 
+struct Material
+{
+    float   shiness;
+    vec3    diffuseColor;
+    vec3    ambienceColor;
+    vec3    specularColor;
+};
+
+uniform Material    u_material;
+uniform sampler2D   u_diffuseMap;
+uniform bool        u_useDiffuseMap;
+
 uniform vec3 uLightPos      = vec3(0.6f, 0.7f, 1.0f);
 uniform vec3 uLightColor    = vec3(1, 1, 1);
-uniform vec3 uObjectColor   = vec3(0.8, 0.8, 0.8);
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -12,6 +23,9 @@ out vec4 FragColor;
 
 void main(void)
 {
+    vec4 diffuseObjectColor = texture(u_diffuseMap, UV);
+    if (u_useDiffuseMap == false) { diffuseObjectColor = vec4(u_material.diffuseColor, 1.0); }
+
     // AMBIENT COLOR
     //
     float   ambientStrength = 0.1;
@@ -27,6 +41,6 @@ void main(void)
 
     // COMBINE COLOR
     //
-    vec3    result      = (ambient + diffuse) * uObjectColor;
-    FragColor           = vec4(result, 1.0);
+    vec4    result      = vec4((ambient + diffuse), 1.0) * diffuseObjectColor;
+    FragColor           = result;
 }

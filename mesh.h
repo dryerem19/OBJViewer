@@ -3,6 +3,7 @@
 
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 
 #include "vertex.h"
@@ -15,7 +16,7 @@ public:
     Mesh(QObject *parent = nullptr);
 
 public slots:
-    void draw       ();
+    void draw       (QOpenGLShaderProgram* shaderProgram);
     void create     (const QVector<Vertex>& vertices, const QVector<quint32>& indices);
     void setMaterial(Material* material);
 

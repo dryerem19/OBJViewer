@@ -19,7 +19,7 @@ void Material::setShinnes(float ns)
 
 void Material::setDiffuseMap(const QString &filename)
 {
-    m_diffuseMap = QImage(filename);
+    m_diffuseMap = new QOpenGLTexture(QImage(filename).mirrored());
 }
 
 void Material::setDiffuseColor(const QVector3D &kd)
@@ -47,7 +47,7 @@ const float &Material::getShiness() const
     return m_shinnes;
 }
 
-const QImage &Material::getDiffuseMap() const
+QOpenGLTexture *Material::getDiffuseMap() const
 {
     return m_diffuseMap;
 }
@@ -65,4 +65,9 @@ const QVector3D &Material::getAmbienceColor() const
 const QVector3D &Material::getSpecularColor() const
 {
     return m_specularColor;
+}
+
+const bool Material::isHasDiffuseMap() const
+{
+    return m_diffuseMap != nullptr;
 }

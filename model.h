@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QVector>
+#include <QOpenGLShaderProgram>
 
 #include "mesh.h"
 #include "materiallibrary.h"
@@ -16,7 +17,7 @@ public:
     ~Model();
 
 public slots:
-    void    draw            ();
+    void    draw            (QOpenGLShaderProgram* shaderProgram);
     bool    loadObjFromFile (const QString& filename);
     bool    addMesh         (Mesh* mesh);
     Mesh*   getMesh         (quint32 index) const;

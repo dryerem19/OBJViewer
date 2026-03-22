@@ -6,11 +6,18 @@ Mesh::Mesh(QObject *parent)
     , m_ebo(QOpenGLBuffer::IndexBuffer)
 {
     auto ctx    = QOpenGLContext::currentContext();
-    m_func      = ctx->functions();;
+    m_func      = ctx->functions();
 }
 
-void Mesh::draw()
+void Mesh::draw(QOpenGLShaderProgram* shaderProgram)
 {
+    m_material->getDiffuseMap()->bind();
+    shaderProgram->setUniformValue("u_material.shiness",        m_material->getShiness());
+    shaderProgram->setUniformValue("u_useDiffuseMap",           m_material->isHasDiffuseMap());
+    shaderProgram->setUniformValue("u_material.diffuseColor",   m_material->getDiffuseColor());
+    shaderProgram->setUniformValue("u_material.ambienceColor",  m_material->getAmbienceColor());
+    shaderProgram->setUniformValue("u_material.specularColor",  m_material->getSpecularColor());
+
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
     m_func->glDrawElements(GL_TRIANGLES, m_ebo.size(), GL_UNSIGNED_INT, 0);
 }

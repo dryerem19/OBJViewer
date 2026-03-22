@@ -63,7 +63,7 @@ void GLWidget::paintGL()
     m_program->setUniformValue("modelMatrix", modelMatrix);
     m_program->setUniformValue("viewMatrix", m_camera->getViewMatrix());
 
-    model.draw();
+    model.draw(m_program);
 }
 
 void GLWidget::timerEvent(QTimerEvent *event)

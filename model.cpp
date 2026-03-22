@@ -19,10 +19,10 @@ Model::~Model()
     }
 }
 
-void Model::draw()
+void Model::draw(QOpenGLShaderProgram* shaderProgram)
 {
     for (int i = 0; i < m_meshes.size(); i++) {
-        m_meshes[i]->draw();
+        m_meshes[i]->draw(shaderProgram);
     }
 }
 
