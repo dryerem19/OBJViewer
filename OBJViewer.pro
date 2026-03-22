@@ -9,23 +9,27 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    glwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     material.cpp \
     materiallibrary.cpp \
     mesh.cpp \
     model.cpp \
-    orbitcamera.cpp
+    objectlist.cpp \
+    orbitcamera.cpp \
+    scene.cpp \
+    scenewidget.cpp
 
 HEADERS += \
-    glwidget.h \
     mainwindow.h \
     material.h \
     materiallibrary.h \
     mesh.h \
     model.h \
+    objectlist.h \
     orbitcamera.h \
+    scene.h \
+    scenewidget.h \
     vertex.h
 
 FORMS += \

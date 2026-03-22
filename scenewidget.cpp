@@ -1,16 +1,21 @@
-#include "glwidget.h"
+#include "scenewidget.h"
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
+SceneWidget::SceneWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
     startTimer(16);
 }
 
-GLWidget::~GLWidget()
+SceneWidget::~SceneWidget()
 {
     cleanup();
 }
 
-void GLWidget::initializeGL()
+Scene *SceneWidget::getScene()
+{
+    return &m_scene;
+}
+
+void SceneWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
@@ -31,30 +36,23 @@ void GLWidget::initializeGL()
     initShader();
 
     m_camera = std::make_unique<OrbitCamera>();
+    m_scene.loadObjFromFile("cube.obj");
 
-    model.loadObjFromFile("cube.obj");
-
-    connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &GLWidget::cleanup);
+    connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &SceneWidget::cleanup);
 }
 
-void GLWidget::resizeGL(int w, int h)
+void SceneWidget::resizeGL(int w, int h)
 {
     glClearColor(0.25, 0.45, 0.65, 1.0);
 }
 
-void GLWidget::paintGL()
+void SceneWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_program->bind();
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.perspective(45.0f, width() / (float)height(), 0.1f, 100.0f);
-
-    // QMatrix4x4 viewMatrix;
-    // // Камера дальше от куба - лучше видно
-    // viewMatrix.lookAt(QVector3D(5.0f, 3.0f, 8.0f),  // позиция камеры дальше
-    //                  QVector3D(0.0f, 0.0f, 0.0f),
-    //                  QVector3D(0.0f, 1.0f, 0.0f));
 
     QMatrix4x4 modelMatrix;
     modelMatrix.setToIdentity();
@@ -63,16 +61,16 @@ void GLWidget::paintGL()
     m_program->setUniformValue("modelMatrix", modelMatrix);
     m_program->setUniformValue("viewMatrix", m_camera->getViewMatrix());
 
-    model.draw(m_program);
+    m_scene.draw(m_program);
 }
 
-void GLWidget::timerEvent(QTimerEvent *event)
+void SceneWidget::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
     update();
 }
 
-void GLWidget::mousePressEvent(QMouseEvent *event)
+void SceneWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && !m_rotating && !m_moving)
     {
@@ -86,7 +84,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent *event)
+void SceneWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_rotating)
     {
@@ -108,7 +106,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-void GLWidget::mouseReleaseEvent(QMouseEvent *event)
+void SceneWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -120,13 +118,13 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void GLWidget::wheelEvent(QWheelEvent *event)
+void SceneWidget::wheelEvent(QWheelEvent *event)
 {
     float delta = event->angleDelta().y() / 120.0f;
     m_camera->zoom(delta * m_zoomSpeed);
 }
 
-void GLWidget::initShader()
+void SceneWidget::initShader()
 {
     m_program = new QOpenGLShaderProgram(this);
     Q_ASSERT(m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,   ":/diffuse.vert"));
@@ -134,10 +132,10 @@ void GLWidget::initShader()
     Q_ASSERT(m_program->link());
 }
 
-void GLWidget::cleanup()
+void SceneWidget::cleanup()
 {
     makeCurrent();
 
     doneCurrent();
-    disconnect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &GLWidget::cleanup);
+    disconnect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &SceneWidget::cleanup);
 }

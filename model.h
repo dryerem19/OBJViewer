@@ -20,10 +20,15 @@ public slots:
     void    draw            (QOpenGLShaderProgram* shaderProgram);
     bool    loadObjFromFile (const QString& filename);
     bool    addMesh         (Mesh* mesh);
-    Mesh*   getMesh         (quint32 index) const;
+    void    setName(const QString& name);
+
+    Mesh*           getMesh         (quint32 index) const;
+    const QString&  getName         () const;
+    quint32         getCountMeshes  () const;
 
 private:
     MaterialLibrary m_mtl;
+    QString         m_name;
     QVector<Mesh*>  m_meshes;
 };
 

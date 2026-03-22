@@ -1,5 +1,5 @@
-#ifndef GLWIDGET_H
-#define GLWIDGET_H
+#ifndef SCENEWIDGET_H
+#define SCENEWIDGET_H
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -9,17 +9,17 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-#include "model.h"
+#include "scene.h"
 #include "orbitcamera.h"
 
-class GLWidget final : public QOpenGLWidget, protected QOpenGLFunctions
+class SceneWidget final : public QOpenGLWidget, protected QOpenGLFunctions
 {
 public:
-    GLWidget(QWidget *parent);
-    ~GLWidget();
+    SceneWidget(QWidget *parent);
+    ~SceneWidget();
 
 public slots:
-    void addMesh(QScopedPointer<Mesh> mesh);
+    Scene* getScene();
 
 protected:
     void initializeGL   ()                      final;
@@ -43,12 +43,10 @@ private:
     float   m_sensitivity   = 0.005f;
     QPoint  m_lastMousePos  = QPoint(0, 0);
 
-
-    QOpenGLShaderProgram* m_program = nullptr;
-    QOpenGLDebugLogger m_logger;
-    Model model;
-
-    std::unique_ptr<OrbitCamera> m_camera;
+    Scene m_scene;
+    QOpenGLShaderProgram*           m_program = nullptr;
+    QOpenGLDebugLogger              m_logger;
+    std::unique_ptr<OrbitCamera>    m_camera;
 };
 
-#endif // GLWIDGET_H
+#endif // SCENEWIDGET_H

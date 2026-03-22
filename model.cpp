@@ -43,6 +43,9 @@ bool Model::loadObjFromFile(const QString &filename)
     Mesh*   mesh = nullptr;
     QString currentMaterialName;
 
+    QFileInfo fileInfo(filename);
+    setName(fileInfo.fileName());
+
     QTextStream in(&file);
     while (!in.atEnd())
     {
@@ -60,8 +63,7 @@ bool Model::loadObjFromFile(const QString &filename)
             QString materialLibraryName;
             ts >> materialLibraryName;
 
-            QFileInfo   modelFileInfo(filename);
-            QString     fullMaterialLibraryPath = QString("%1/%2").arg(modelFileInfo.absolutePath()).arg(materialLibraryName);
+            QString fullMaterialLibraryPath = QString("%1/%2").arg(fileInfo.absolutePath()).arg(materialLibraryName);
             m_mtl.loadMaterialFromFile(fullMaterialLibraryPath);
         }
         else if (begin == "v")
@@ -154,6 +156,11 @@ bool Model::addMesh(Mesh *mesh)
     return true;
 }
 
+void Model::setName(const QString &name)
+{
+    m_name = name;
+}
+
 Mesh *Model::getMesh(quint32 index) const
 {
     if (index < (quint32)m_meshes.size()) {
@@ -161,4 +168,14 @@ Mesh *Model::getMesh(quint32 index) const
     }
 
     return nullptr;
+}
+
+const QString &Model::getName() const
+{
+    return m_name;
+}
+
+quint32 Model::getCountMeshes() const
+{
+    return (quint32)m_meshes.size();
 }

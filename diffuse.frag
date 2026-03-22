@@ -24,7 +24,9 @@ out vec4 FragColor;
 void main(void)
 {
     vec4 diffuseObjectColor = texture(u_diffuseMap, UV);
-    if (u_useDiffuseMap == false) { diffuseObjectColor = vec4(u_material.diffuseColor, 1.0); }
+    diffuseObjectColor *= vec4(u_material.diffuseColor, 1.0);
+
+    // if (u_useDiffuseMap == false) { diffuseObjectColor = vec4(u_material.diffuseColor, 1.0); }
 
     // AMBIENT COLOR
     //
@@ -38,6 +40,10 @@ void main(void)
 
     float   diff        = max(dot(norm, lightDir), 0.0);
     vec3    diffuse     = diff * uLightColor;
+
+    // SPECULAR COLOR
+    //
+
 
     // COMBINE COLOR
     //
