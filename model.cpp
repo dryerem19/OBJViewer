@@ -113,11 +113,6 @@ bool Model::loadObjFromFile(const QString &filename)
         }
         else if (begin == "g")
         {
-            QString group;
-            ts >> currentGroupName;
-        }
-        else if (begin == "usemtl")
-        {
             if (mesh)
             {
                 mesh->create(vertices, indices);
@@ -126,12 +121,17 @@ bool Model::loadObjFromFile(const QString &filename)
                 addMesh(mesh);
             }
 
-            QString materialName;
-            ts >> currentMaterialName;
+            QString group;
+            ts >> currentGroupName;
 
             mesh = new Mesh;
             vertices.clear();
             indices.clear();
+        }
+        else if (begin == "usemtl")
+        {
+            QString materialName;
+            ts >> currentMaterialName;
         }
     }
 
