@@ -21,8 +21,14 @@ void ObjectList::onAddModel(Model *model)
 {
     QTreeWidgetItem* modelItem = new QTreeWidgetItem(this);
     modelItem->setText(0, model->getName());
-    if (model->getCountMeshes() > 1) {
-        modelItem->setExpanded(true);
+
+    for (int i = 0; i < model->getCountMeshes(); i++)
+    {
+        auto mesh       = model->getMesh(i);
+        auto meshItem   = new QTreeWidgetItem;
+        meshItem->setText(0, mesh->getName());
+        modelItem->addChild(meshItem);
     }
+
     addTopLevelItem(modelItem);
 }

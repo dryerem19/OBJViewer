@@ -41,6 +41,7 @@ bool Model::loadObjFromFile(const QString &filename)
     QVector<quint32>    indices;
 
     Mesh*   mesh = nullptr;
+    QString currentGroupName;
     QString currentMaterialName;
 
     QFileInfo fileInfo(filename);
@@ -110,12 +111,17 @@ bool Model::loadObjFromFile(const QString &filename)
                 indices.append(indices.size());
             }
         }
+        else if (begin == "g")
+        {
+            QString group;
+            ts >> currentGroupName;
+        }
         else if (begin == "usemtl")
         {
             if (mesh)
             {
-
                 mesh->create(vertices, indices);
+                mesh->setName(currentGroupName);
                 mesh->setMaterial(m_mtl.getMaterial(currentMaterialName));
                 addMesh(mesh);
             }
@@ -132,6 +138,7 @@ bool Model::loadObjFromFile(const QString &filename)
     if (mesh)
     {
         mesh->create(vertices, indices);
+        mesh->setName(currentGroupName);
         mesh->setMaterial(m_mtl.getMaterial(currentMaterialName));
         addMesh(mesh);
     }

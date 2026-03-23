@@ -66,7 +66,17 @@ void Mesh::create(const QVector<Vertex> &vertices, const QVector<quint32> &indic
     m_vbo.release();
 }
 
+void Mesh::setName(const QString &name)
+{
+    m_name = name;
+}
+
 void Mesh::setMaterial(Material *material)
 {
     m_material = material;
+}
+
+const QString &Mesh::getName() const
+{
+    return m_name;
 }

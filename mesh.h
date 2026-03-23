@@ -18,13 +18,17 @@ public:
 public slots:
     void draw       (QOpenGLShaderProgram* shaderProgram);
     void create     (const QVector<Vertex>& vertices, const QVector<quint32>& indices);
+    void setName    (const QString& name);
     void setMaterial(Material* material);
+
+    const QString& getName() const;
 
 private:
     QOpenGLVertexArrayObject    m_vao;
     QOpenGLBuffer               m_vbo;
     QOpenGLBuffer               m_ebo;
     QOpenGLFunctions*           m_func;
+    QString                     m_name;
     Material*                   m_material;
 };
 
