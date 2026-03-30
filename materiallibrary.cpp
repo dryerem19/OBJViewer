@@ -16,6 +16,12 @@ MaterialLibrary::~MaterialLibrary()
     clear();
 }
 
+Material *MaterialLibrary::getDefaultMaterial()
+{
+    static Material defaultMaterial;
+    return &defaultMaterial;
+}
+
 void MaterialLibrary::clear()
 {
     for (int i = 0; i < m_materials.size(); i++) {

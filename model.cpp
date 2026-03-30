@@ -125,6 +125,8 @@ bool Model::loadObjFromFile(const QString &filename)
             ts >> currentGroupName;
 
             mesh = new Mesh;
+            mesh->setMaterial(MaterialLibrary::getDefaultMaterial());
+
             vertices.clear();
             indices.clear();
         }

@@ -13,6 +13,8 @@ public:
     explicit MaterialLibrary(QObject *parent = nullptr);
     ~MaterialLibrary();
 
+    static Material* getDefaultMaterial();
+
 public slots:
     void        clear               ();
     bool        addMaterial         (Material* material);

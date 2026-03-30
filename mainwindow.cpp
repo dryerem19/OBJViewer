@@ -19,6 +19,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionOpen_file_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open OBJ"), qApp->applicationDirPath(), tr("OBJ Files (*.obj)"));
-    ui->sceneWidget->getScene()->loadObjFromFile(fileName);
+    ui->sceneWidget->loadObjFromFile(fileName);
 }
 

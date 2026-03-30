@@ -19,6 +19,7 @@ public:
     ~SceneWidget();
 
 public slots:
+    void loadObjFromFile(const QString& filename);
     Scene* getScene();
 
 protected:

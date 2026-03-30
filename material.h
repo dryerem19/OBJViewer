@@ -27,14 +27,13 @@ public slots:
     const QVector3D&    getDiffuseColor () const;
     const QVector3D&    getAmbienceColor() const;
     const QVector3D&    getSpecularColor() const;
-    const bool          isHasDiffuseMap () const;
 
 private:
-    QString             m_name;
-    float               m_shinnes;
-    QVector3D           m_diffuseColor;
-    QVector3D           m_ambienceColor;
-    QVector3D           m_specularColor;
+    QString             m_name{"defaultMaterial"};
+    float               m_shinnes{10};
+    QVector3D           m_diffuseColor{1.0f, 1.0f, 1.0f};
+    QVector3D           m_ambienceColor{1.0f, 1.0f, 1.0f};
+    QVector3D           m_specularColor{0.2f, 0.2f, 0.2f};
     QOpenGLTexture*     m_diffuseMap{nullptr};
 };
 

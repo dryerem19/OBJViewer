@@ -10,6 +10,12 @@ SceneWidget::~SceneWidget()
     cleanup();
 }
 
+void SceneWidget::loadObjFromFile(const QString &filename)
+{
+    makeCurrent();
+    m_scene.loadObjFromFile(filename);
+}
+
 Scene *SceneWidget::getScene()
 {
     return &m_scene;
@@ -36,8 +42,6 @@ void SceneWidget::initializeGL()
     initShader();
 
     m_camera = std::make_unique<OrbitCamera>();
-    m_scene.loadObjFromFile("cube.obj");
-
     connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &SceneWidget::cleanup);
 }
 

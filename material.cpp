@@ -66,8 +66,3 @@ const QVector3D &Material::getSpecularColor() const
 {
     return m_specularColor;
 }
-
-const bool Material::isHasDiffuseMap() const
-{
-    return m_diffuseMap != nullptr;
-}

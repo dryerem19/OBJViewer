@@ -25,8 +25,7 @@ void main(void)
 {
     vec4 diffuseObjectColor = texture(u_diffuseMap, UV);
     diffuseObjectColor *= vec4(u_material.diffuseColor, 1.0);
-
-    // if (u_useDiffuseMap == false) { diffuseObjectColor = vec4(u_material.diffuseColor, 1.0); }
+    if (u_useDiffuseMap == false) { diffuseObjectColor = vec4(u_material.diffuseColor, 1.0); }
 
     // AMBIENT COLOR
     //

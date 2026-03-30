@@ -11,29 +11,42 @@ Mesh::Mesh(QObject *parent)
 
 void Mesh::draw(QOpenGLShaderProgram* shaderProgram)
 {
-    m_material->getDiffuseMap()->bind();
+    auto diffuseMap = m_material->getDiffuseMap();
+    if (diffuseMap)
+    {
+        diffuseMap->bind();
+        shaderProgram->setUniformValue("u_useDiffuseMap", true);
+    }
+
     shaderProgram->setUniformValue("u_material.shiness",        m_material->getShiness());
-    shaderProgram->setUniformValue("u_useDiffuseMap",           m_material->isHasDiffuseMap());
     shaderProgram->setUniformValue("u_material.diffuseColor",   m_material->getDiffuseColor());
     shaderProgram->setUniformValue("u_material.ambienceColor",  m_material->getAmbienceColor());
     shaderProgram->setUniformValue("u_material.specularColor",  m_material->getSpecularColor());
 
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
     m_func->glDrawElements(GL_TRIANGLES, m_ebo.size(), GL_UNSIGNED_INT, 0);
+
+    if (diffuseMap)
+    {
+        diffuseMap->release();
+    }
 }
 
 void Mesh::create(const QVector<Vertex> &vertices, const QVector<quint32> &indices)
 {
+    Q_ASSERT(vertices.size() > 0);
+    Q_ASSERT(indices.size() > 0);
+
     // Заполняем буфер
     if (m_vbo.isCreated()) m_vbo.destroy();
-    Q_ASSERT(m_vbo.create());
+    Q_ASSERT(m_vbo.create() == true);
     m_vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
     m_vbo.bind();
     m_vbo.allocate(vertices.constData(), vertices.size() * sizeof(Vertex));
 
     // Создаём объект массива вершин
     if (m_vao.isCreated()) m_vao.destroy();
-    Q_ASSERT(m_vao.create());
+    Q_ASSERT(m_vao.create() == true);
     m_vao.bind();
 
     // Активируем массивы вершинных атрибутов
@@ -54,7 +67,7 @@ void Mesh::create(const QVector<Vertex> &vertices, const QVector<quint32> &indic
 
     // Заполняем буфер индексов
     if (m_ebo.isCreated()) m_ebo.destroy();;
-    Q_ASSERT(m_ebo.create());
+    Q_ASSERT(m_ebo.create() == true);
     m_ebo.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
     m_ebo.bind();
@@ -73,7 +86,10 @@ void Mesh::setName(const QString &name)
 
 void Mesh::setMaterial(Material *material)
 {
-    m_material = material;
+    if (material)
+    {
+        m_material = material;
+    }
 }
 
 const QString &Mesh::getName() const
